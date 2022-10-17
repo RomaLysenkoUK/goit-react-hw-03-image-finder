@@ -1,9 +1,15 @@
+import PropTypes from 'prop-types';
+import s from './Button.module.css';
 export const ButtonPagination = ({ pagination }) => {
   return (
-    <>
-      <button type="button" onClick={pagination}>
+    <div className={s.container}>
+      <button type="button" className={s.btn} onClick={pagination}>
         Load more
       </button>
-    </>
+    </div>
   );
 };
+
+ButtonPagination.propTypes = {
+pagination: PropTypes.func.isRequired,
+}

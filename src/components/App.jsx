@@ -5,30 +5,32 @@ import { Gallery } from './ImageGallery/ImageGallery';
 export class App extends Component {
   state = {
     searchQuery: '',
-    // gallery: [],
+    gallery: [],
+    isLoading: false,
+    error: null,
   };
 
   handleFormSubmit = searchQuery => {
     this.setState({ searchQuery });
   };
+  stateUpdate = (gallery, isLoading, error) => {
+    this.setState({ gallery, isLoading, error });
+  };
   render() {
+   
     return (
-      <div
-        style={{
-          height: '100vh',
-          // display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          fontSize: 40,
-          color: '#010101',
-        }}
-      >
-        <Searchbar onSubmit={this.handleFormSubmit} />
+      <>
+        <Searchbar
+          onSubmit={this.handleFormSubmit}
+          gallery={this.state.gallery}
+          isLoading={this.state.isLoading}
+          error={this.state.error}
+        />
         <Gallery
           searchQuery={this.state.searchQuery}
-          gallery={this.state.gallery}
+          onUpdate={this.stateUpdate}
         />
-      </div>
+      </>
     );
   }
 }

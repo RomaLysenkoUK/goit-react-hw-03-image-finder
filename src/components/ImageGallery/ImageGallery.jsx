@@ -16,9 +16,10 @@ export class Gallery extends Component {
     currentImage: null,
   };
 
-  static propTypes = { 
+  static propTypes = {
     searchQuery: PropTypes.string.isRequired,
-    onUpdate: PropTypes.func.isRequired}
+    onUpdate: PropTypes.func.isRequired,
+  };
 
   async componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevProps.searchQuery;
@@ -26,7 +27,7 @@ export class Gallery extends Component {
     const prevPage = prevState.page;
     const nextPage = this.state.page;
 
-     if (prevQuery !== nextQuery) {
+    if (prevQuery !== nextQuery) {
       try {
         this.setState({ isLoading: true, page: 1 });
         const pictureData = await axiosPicture(nextQuery);
@@ -36,7 +37,6 @@ export class Gallery extends Component {
           this.state.isLoading,
           this.state.error
         );
-      
       } catch (err) {
         this.setState({ error: err.message });
       } finally {
@@ -50,7 +50,7 @@ export class Gallery extends Component {
           this.props.searchQuery,
           this.state.page
         );
-     
+
         this.setState(({ gallery }) => ({
           gallery: [...gallery, ...pictureData],
         }));
@@ -66,7 +66,7 @@ export class Gallery extends Component {
       }
     }
   }
-   pagination = e => {
+  pagination = e => {
     e.preventDefault();
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
@@ -85,18 +85,15 @@ export class Gallery extends Component {
           <span className={s.error}>Oops! Something went wrong. {error}</span>
         )}
         <ul className={s.gallery}>
-          {!!gallery.length && (
-            <GalleryItem
-              gallery={gallery}
-              openModal={this.updateCurrentImage}
-            />
-          )}
+          {!!gallery.length &&
+            gallery.map(item => (
+              <GalleryItem {...item} openModal={this.updateCurrentImage} />
+            ))}
         </ul>
         {isLoading && <ThreeDots />}
-        {!!gallery.length &&
-          gallery.length >= page * 12 && (
-            <ButtonPagination pagination={this.pagination} />
-          )}
+        {!!gallery.length && gallery.length >= page * 12 && (
+          <ButtonPagination pagination={this.pagination} />
+        )}
 
         {currentImage && (
           <Modal image={currentImage} closeModal={this.closeModal} />
@@ -105,5 +102,3 @@ export class Gallery extends Component {
     );
   }
 }
-
-
